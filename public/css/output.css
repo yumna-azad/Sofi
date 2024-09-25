@@ -1,0 +1,22 @@
+/* Vendor prefix for appearance property for compatibility */
+button,
+input,
+optgroup,
+select,
+textarea {
+  -webkit-appearance: none; /* For WebKit-based browsers */
+  -moz-appearance: none; /* For Firefox */
+  appearance: none; /* Standard syntax */
+}
+
+/* Remove vertical-align for block-level elements */
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block; /* Correct for block-level display */
+}
