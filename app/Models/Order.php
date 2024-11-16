@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    // Defining fillable fields
+    //  fillable fields
     protected $fillable = [
         'user_id',
         'grand_total',
@@ -22,19 +22,19 @@ class Order extends Model
         'notes',
     ];
 
-    // Defining relationship with User model
+    // relationship with User model
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Defining relationship with OrderItem model
+    // relationship with OrderItem model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    // Defining relationship with Address model
+    //  relationship with Address model
     public function address()
     {
         return $this->hasOne(Address::class);

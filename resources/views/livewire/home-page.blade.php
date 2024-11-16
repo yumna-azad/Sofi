@@ -133,7 +133,7 @@
 </html>
 
 
-<img src="images/chair.png" alt="Chair" style="width: 100vw; height: 80vh; object-fit: cover;">
+<img src="images/image.png" alt="Chair" style="width: 100vw; height: 80vh; object-fit: cover;">
 
 <section class="bg-gray-100">
   <div class="container mx-auto py-16">

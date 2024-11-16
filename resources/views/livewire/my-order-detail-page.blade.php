@@ -22,7 +22,7 @@
             </p>
           </div>
           <div class="mt-1 flex items-center gap-x-2">
-            <div>Jace Grimes</div>
+            <div>{{$address->full_name}}</div>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
           </div>
           <div class="mt-1 flex items-center gap-x-2">
             <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200">
-              17-02-2024
+              {{$order_items[0]->created_at0>format('d'"m""y")}}
             </h3>
           </div>
         </div>

@@ -5,33 +5,21 @@
         <aside class="w-full pr-2 lg:w-1/4 lg:block">
           <div class="p-4 mb-5 bg-white border border-gray-200 dark:border-gray-900 dark:bg-gray-900">
             <h2 class="text-2xl font-bold dark:text-gray-400">Categories</h2>
+            
             <div class="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
             <ul>
-              <li class="mb-4">
-                <label for="smartphones" class="flex items-center dark:text-gray-400">
-                  <input type="checkbox" id="smartphones" class="w-4 h-4 mr-2">
-                  <span class="text-lg">Bed</span>
-                </label>
-              </li>
-              <li class="mb-4">
-                <label for="laptops" class="flex items-center dark:text-gray-400">
-                  <input type="checkbox" id="laptops" class="w-4 h-4 mr-2">
-                  <span class="text-lg">Chair</span>
-                </label>
-              </li>
-              <li class="mb-4">
-                <label for="smartwatches" class="flex items-center dark:text-gray-400">
-                  <input type="checkbox" id="smartwatches" class="w-4 h-4 mr-2">
-                  <span class="text-lg">sofa</span>
-                </label>
-              </li>
-              <li class="mb-4">
-                <label for="television" class="flex items-center dark:text-gray-400">
-                  <input type="checkbox" id="television" class="w-4 h-4 mr-2">
-                  <span class="text-lg">accessories</span>
-                </label>
-              </li>
-            </ul>
+    @foreach($categories as $category)
+    <li class="mb-4" wire:key="{{ $category->id }}">
+        <label for="{{ $category->slug }}" class="flex items-center dark:text-gray-400">
+            <input type="checkbox" wire:model.live="selected_categories" id="{{ $category->slug }}" class="w-4 h-4 mr-2">
+            <span class="text-lg">
+                {{ $category->name }}
+            </span>
+        </label>
+    </li>
+    @endforeach
+</ul>
+
           </div>
           <div class="p-4 mb-5 bg-white border border-gray-200 dark:bg-gray-900 dark:border-gray-900">
             <h2 class="text-2xl font-bold dark:text-gray-400">Brand</h2>
@@ -51,29 +39,50 @@
             <ul>
               <li class="mb-4">
                 <label for="in-stock" class="flex items-center dark:text-gray-300">
-                  <input type="checkbox" id="in-stock" class="w-4 h-4 mr-2">
+                  <input type="checkbox" id="in-stock"wire:model.live="in-stock" class="w-4 h-4 mr-2">
                   <span class="text-lg dark:text-gray-400">In Stock</span>
                 </label>
               </li>
               <li class="mb-4">
                 <label for="on-sale" class="flex items-center dark:text-gray-300">
-                  <input type="checkbox" id="on-sale" class="w-4 h-4 mr-2">
+                  <input type="checkbox" id="on-sale" wire:model.live="on-sale" class="w-4 h-4 mr-2">
                   <span class="text-lg dark:text-gray-400">On Sale</span>
                 </label>
               </li>
             </ul>
           </div>
           <div class="p-4 mb-5 bg-white border border-gray-200 dark:bg-gray-900 dark:border-gray-900">
-            <h2 class="text-2xl font-bold dark:text-gray-400">Price</h2>
-            <div class="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
-            <div>
-              <input type="range" class="w-full h-1 mb-4 bg-blue-100 rounded appearance-none cursor-pointer" max="500000" value="100000" step="100000" aria-label="Price range">
-              <div class="flex justify-between">
-                <span class="inline-block text-lg font-bold text-blue-400">&#8377; 1000</span>
-                <span class="inline-block text-lg font-bold text-blue-400">&#8377; 500000</span>
-              </div>
-            </div>
-          </div>
+    <h2 class="text-2xl font-bold dark:text-gray-400">Price</h2>
+    <div class="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
+    
+    <div>
+    <!-- Display the current price range dynamically -->
+    <div class="font-semibold">
+        {{ Number::currency($price_range, 'INR') }}
+    </div>
+
+    <!-- Input range for adjusting the price -->
+    <input 
+        type="range" 
+        wire:model.live="price_range" 
+        class="w-full h-1 mb-4 bg-blue-100 rounded appearance-none cursor-pointer" 
+        max="500000" 
+        value="300000" 
+        step="1000"
+    >
+
+    <!-- Min and max price labels -->
+    <div class="flex justify-between">
+        <span class="inline-block text-lg font-bold text-blue-400">
+            {{ Number::currency(1000, 'INR') }}
+        </span>
+        <span class="inline-block text-lg font-bold text-blue-400">
+            {{ Number::currency(500000, 'INR') }}
+        </span>
+    </div>
+</div>
+
+
         </aside>
         <main class="w-full px-3 lg:w-3/4">
           <div class="px-3 mb-4">
@@ -97,277 +106,50 @@
         <main>
           <div class="flex flex-wrap -mx-3">
 
-            <!-- Product Card 1 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
+          @foreach($products as $product)
+             <!-- Product Card 1 -->
+             <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
               <div class="border border-gray-300 dark:border-gray-700">
                 <div class="relative bg-gray-200">
-                  <a href="/products/modern_bedroom_storage" class="">
-                    <img src="images/1.jpg" alt="Modern Bedroom Storage" class="object-cover w-full h-56 mx-auto" loading="lazy">
+                  <a href="/products/{{$product ->slug}}" class="">
+                    <img src="{{url('storage',$product->images[0])}}" alt="Modern Bedroom Storage" class="object-cover w-full h-56 mx-auto" loading="lazy">
                   </a>
                 </div>
                 <div class="p-3">
                   <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Modern Bedroom Storage</h3>
+                    <h3 class="text-xl font-medium dark:text-gray-400">{{$product->name}}</h3>
                   </div>
                   <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$800.00</span>
+                    <span class="text-green-600 dark:text-green-600">{{Number::currency($product->price,'INR')}}</span>
                   </p>
                 </div>
                 <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
+                                      <a wire:click.prevent="addToCart({{ $product->id }})" href="#" class="
+                      text-gray-500
+                      flex items-center space-x-2
+                      dark:text-gray-400
+                      hover:text-red-500
+                      dark:hover:text-red-300">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                          class="w-4 h-4 bi bi-cart3" viewBox="0 0 16 16">
+                              <path d="M0 1.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1.5 9a.5.5 0 0 1-.465.401H4.415l-.972-3.597L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.367 5.144L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                          </svg>
+                          <span>Add to Cart</span>            
+                           <span wire:loading>Adding</span>
+                      </a>
+
+
                 </div>
               </div>
             </article>
 
-            <!-- Product Card 2 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
-              <div class="border border-gray-300 dark:border-gray-700">
-                <div class="relative bg-gray-200">
-                  <a href="/products/bobber_table_lamp" class="">
-                    <img src="images/2.jpg" alt="Bobber Table Lamp" class="object-cover w-full h-56 mx-auto" loading="lazy">
-                  </a>
-                </div>
-                <div class="p-3">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Bobber Table Lamp</h3>
-                  </div>
-                  <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$850.00</span>
-                  </p>
-                </div>
-                <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-            
-            <!-- Product Card 3 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
-              <div class="border border-gray-300 dark:border-gray-700">
-                <div class="relative bg-gray-200">
-                  <a href="/products/arne_dining_chair" class="">
-                    <img src="images/3.jpg" alt="Arne Dining Chair" class="object-cover w-full h-56 mx-auto" loading="lazy">
-                  </a>
-                </div>
-                <div class="p-3">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Arne Dining Chair</h3>
-                  </div>
-                  <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$900.00</span>
-                  </p>
-                </div>
-                <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </article>
+        
 
-            <!-- Product Card 4 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
-              <div class="border border-gray-300 dark:border-gray-700">
-                <div class="relative bg-gray-200">
-                  <a href="/products/eloise_bed" class="">
-                    <img src="images/4.jpg" alt="Eloise Bed" class="object-cover w-full h-56 mx-auto" loading="lazy">
-                  </a>
-                </div>
-                <div class="p-3">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Eloise Bed</h3>
-                  </div>
-                  <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$950.00</span>
-                  </p>
-                </div>
-                <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-            
-            <!-- Product Card 5 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
-              <div class="border border-gray-300 dark:border-gray-700">
-                <div class="relative bg-gray-200">
-                  <a href="/products/skyline_sofa" class="">
-                    <img src="images/5.jpg" alt="Skyline Sofa" class="object-cover w-full h-56 mx-auto" loading="lazy">
-                  </a>
-                </div>
-                <div class="p-3">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Skyline Sofa</h3>
-                  </div>
-                  <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$1000.00</span>
-                  </p>
-                </div>
-                <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-            
-            <!-- Product Card 6 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
-              <div class="border border-gray-300 dark:border-gray-700">
-                <div class="relative bg-gray-200">
-                  <a href="/products/atomic_chair" class="">
-                    <img src="images/6.jpg" alt="Atomic Chair" class="object-cover w-full h-56 mx-auto" loading="lazy">
-                  </a>
-                </div>
-                <div class="p-3">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Atomic Chair</h3>
-                  </div>
-                  <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$1100.00</span>
-                  </p>
-                </div>
-                <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Product Card 7 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
-              <div class="border border-gray-300 dark:border-gray-700">
-                <div class="relative bg-gray-200">
-                  <a href="/products/harper_desk" class="">
-                    <img src="images/7.jpg" alt="Harper Desk" class="object-cover w-full h-56 mx-auto" loading="lazy">
-                  </a>
-                </div>
-                <div class="p-3">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Harper Desk</h3>
-                  </div>
-                  <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$1050.00</span>
-                  </p>
-                </div>
-                <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Product Card 8 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
-              <div class="border border-gray-300 dark:border-gray-700">
-                <div class="relative bg-gray-200">
-                  <a href="/products/bright_side_table" class="">
-                    <img src="images/8.jpg" alt="Bright Side Table" class="object-cover w-full h-56 mx-auto" loading="lazy">
-                  </a>
-                </div>
-                <div class="p-3">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Bright Side Table</h3>
-                  </div>
-                  <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$1150.00</span>
-                  </p>
-                </div>
-                <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Product Card 9 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
-              <div class="border border-gray-300 dark:border-gray-700">
-                <div class="relative bg-gray-200">
-                  <a href="/products/marble_console_table" class="">
-                    <img src="images/7.jpg" alt="Marble Console Table" class="object-cover w-full h-56 mx-auto" loading="lazy">
-                  </a>
-                </div>
-                <div class="p-3">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Marble Console Table</h3>
-                  </div>
-                  <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$1200.00</span>
-                  </p>
-                </div>
-                <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-            
-            <!-- Product Card 10 -->
-            <article class="w-full px-3 mb-6 sm:w-1/2 md:w-1/3">
-              <div class="border border-gray-300 dark:border-gray-700">
-                <div class="relative bg-gray-200">
-                  <a href="/products/urban_armchair" class="">
-                    <img src="images/8.jpg" alt="Urban Armchair" class="object-cover w-full h-56 mx-auto" loading="lazy">
-                  </a>
-                </div>
-                <div class="p-3">
-                  <div class="flex items-center justify-between gap-2 mb-2">
-                    <h3 class="text-xl font-medium dark:text-gray-400">Urban Armchair</h3>
-                  </div>
-                  <p class="text-lg">
-                    <span class="text-green-600 dark:text-green-600">$1250.00</span>
-                  </p>
-                </div>
-                <div class="flex justify-center p-4 border-t border-gray-300 dark:border-gray-700">
-                  <a href="#" class="text-gray-500 flex items-center space-x-2 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span class="text-sm font-medium">Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-
+          @endforeach
           </div>
+          <div class="flex justify-end mt-6">
+            {{$products->links()}}
+            </div>   
         </main>
       </div>
     </div>
