@@ -68,3 +68,6 @@ Route::prefix('api')->group(function () {
         ->middleware('auth:sanctum')
         ->name('api.reviews.store');
 });
+Route::get('/healthz', function () {
+    return response()->json(['status' => 'OK']);
+});
