@@ -5,6 +5,10 @@ namespace App\Livewire\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth; // Import Auth facade
 use Illuminate\Validation\ValidationException; // Import ValidationException
+use Laravel\Fortify\Actions\AttemptToAuthenticate;
+use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
+use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
+use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 
 #[Title('login')]
 class LoginPage extends Component
@@ -14,21 +18,21 @@ class LoginPage extends Component
 
     public function save()
     {
-        // Validation rules
         $this->validate([
-            'email' => 'required|email|max:255|exists:users,email',
-            'password' => 'required|min:6|max:255',
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        // Attempt to authenticate the user
-        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
-            // Flash error message on failure
-            session()->flash('error', 'Invalid credentials');
-            return;
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+            session()->regenerate();
+
+            return auth()->user()->isAdmin() 
+                ? redirect()->intended(route('admin.dashboard'))
+                : redirect()->intended(route('dashboard'));
         }
 
-        // Redirect on success
-        return redirect()->intended();
+        session()->flash('error', 'Invalid credentials');
+        return;
     }
 
     public function render()

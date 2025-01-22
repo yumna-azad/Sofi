@@ -1,6 +1,11 @@
 <?php
 
+use Illuminate\Support\ServiceProvider;
+
 return [
+
+ 
+
 
     /*
     |--------------------------------------------------------------------------
@@ -104,6 +109,7 @@ return [
             explode(',', env('APP_PREVIOUS_KEYS', ''))
         ),
     ],
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +128,20 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    'providers' => ServiceProvider::defaultProviders()->merge([
+        /*
+         * Package Service Providers...
+         */
+        MongoDB\Laravel\MongoDBServiceProvider::class,
+
+        /*
+         * Application Service Providers...
+         */
+        App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+    ])->toArray(),
 
 ];

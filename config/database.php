@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'mongodb'),
 
     /*
     |--------------------------------------------------------------------------
@@ -30,8 +30,10 @@ return [
     */
 
     'connections' => [
+        
 
         'sqlite' => [
+            
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
             'database' => env('DB_DATABASE', database_path('database.sqlite')),
@@ -61,6 +63,12 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+'mongodb' => [
+    'driver' => 'mongodb',
+    'dsn' => env('MONGODB_DSN'),
+    'database' => env('MONGODB_DATABASE', 'furniture'),
+],
+
 
         'mariadb' => [
             'driver' => 'mariadb',
@@ -167,6 +175,8 @@ return [
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
+
+        
 
     ],
 

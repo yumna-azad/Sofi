@@ -9,6 +9,8 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $connection = 'mysql';
+
     protected $fillable = [
         'category_id',
         'name',           
